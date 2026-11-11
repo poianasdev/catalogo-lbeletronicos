@@ -620,7 +620,7 @@
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Imagens WEBP Vinculadas</div>
-        <div class="kpi-val" id="kpi-hd" style="color:#a78bfa;">imagens/*.webp</div>
+        <div class="kpi-val" id="kpi-hd" style="color:#a78bfa;">img/*.webp</div>
         <div class="kpi-sub" id="kpi-hd-sub">Padrão SHA-1 (10 dígitos) + Fallback Shopify</div>
       </div>
     </section>
@@ -816,25 +816,32 @@ git push -u origin main</pre>
     function getProductImageSrc(p) {
       if (p.img && localBlobMap[p.img]) return localBlobMap[p.img];
       if (p.h && hdImageCache[p.h]) return hdImageCache[p.h];
-      if (p.img) return `imagens/${p.img}.webp`;
+      if (p.img) return `img/${p.img}.webp`;
       return getPlaceholderSvg(p.cn);
     }
 
-    // Fallback if a product's .webp is missing from `imagens/`
+    // Fallback if a product's .webp fails
     async function handleImgError(imgElem, handle, imgHash) {
-      if (imgElem.getAttribute('data-fallback-tried') === '1') return;
-      imgElem.setAttribute('data-fallback-tried', '1');
-      if (handle && hdImageCache[handle]) {
-        imgElem.src = hdImageCache[handle];
+      const step = parseInt(imgElem.getAttribute('data-fallback-step') || '0', 10);
+      if (step === 0 && imgHash) {
+        imgElem.setAttribute('data-fallback-step', '1');
+        imgElem.src = `imagens/${imgHash}.webp`;
         return;
       }
-      imgElem.src = getPlaceholderSvg(imgElem.alt || 'LB');
-      if (!handle) return;
-      const hdSrc = await fetchShopifyHdImage(handle);
-      if (hdSrc) {
-        hdImageCache[handle] = hdSrc;
-        localStorage.setItem('lb_hd_img_cache_v1', JSON.stringify(hdImageCache));
-        imgElem.src = hdSrc;
+      if (step <= 1) {
+        imgElem.setAttribute('data-fallback-step', '2');
+        if (handle && hdImageCache[handle]) {
+          imgElem.src = hdImageCache[handle];
+          return;
+        }
+        imgElem.src = getPlaceholderSvg(imgElem.alt || 'LB');
+        if (!handle) return;
+        const hdSrc = await fetchShopifyHdImage(handle);
+        if (hdSrc) {
+          hdImageCache[handle] = hdSrc;
+          localStorage.setItem('lb_hd_img_cache_v1', JSON.stringify(hdImageCache));
+          imgElem.src = hdSrc;
+        }
       }
     }
 
