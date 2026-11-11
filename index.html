@@ -823,26 +823,29 @@ git push -u origin main</pre>
     // Fallback if a product's .webp fails
     async function handleImgError(imgElem, handle, imgHash) {
       const step = parseInt(imgElem.getAttribute('data-fallback-step') || '0', 10);
+      imgElem.setAttribute('data-fallback-step', (step + 1).toString());
+
       if (step === 0 && imgHash) {
-        imgElem.setAttribute('data-fallback-step', '1');
+        imgElem.src = `img/${imgHash}.jpg`;
+        return;
+      }
+      if (step === 1 && imgHash) {
+        imgElem.src = `img/${imgHash}.jpeg`;
+        return;
+      }
+      if (step === 2 && imgHash) {
+        imgElem.src = `img/${imgHash}.png`;
+        return;
+      }
+      if (step === 3 && imgHash) {
         imgElem.src = `imagens/${imgHash}.webp`;
         return;
       }
-      if (step <= 1) {
-        imgElem.setAttribute('data-fallback-step', '2');
-        if (handle && hdImageCache[handle]) {
-          imgElem.src = hdImageCache[handle];
-          return;
-        }
-        imgElem.src = getPlaceholderSvg(imgElem.alt || 'LB');
-        if (!handle) return;
-        const hdSrc = await fetchShopifyHdImage(handle);
-        if (hdSrc) {
-          hdImageCache[handle] = hdSrc;
-          localStorage.setItem('lb_hd_img_cache_v1', JSON.stringify(hdImageCache));
-          imgElem.src = hdSrc;
-        }
+      if (step === 4 && imgHash) {
+        imgElem.src = `imagens/${imgHash}.jpg`;
+        return;
       }
+      imgElem.src = getPlaceholderSvg(imgElem.alt || 'LB');
     }
 
     async function fetchShopifyHdImage(handle) {
