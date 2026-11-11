@@ -16,8 +16,8 @@
       --text: #0f172a;
       --text-muted: #64748b;
       --text-light: #94a3b8;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
       --primary-light: #eef2ff;
       --ml-yellow: #ffe600;
       --ml-hover: #f5dc00;
@@ -27,12 +27,15 @@
       --green: #10b981;
       --green-light: #ecfdf5;
       --green-text: #047857;
+      --green-border: #a7f3d0;
       --amber: #f59e0b;
       --amber-light: #fffbeb;
       --amber-text: #b45309;
+      --amber-border: #fde68a;
       --red: #ef4444;
       --red-light: #fef2f2;
       --red-text: #b91c1c;
+      --red-border: #fecaca;
       --purple: #8b5cf6;
       --purple-light: #f5f3ff;
       --purple-text: #6d28d9;
@@ -84,13 +87,13 @@
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
-      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
       flex-shrink: 0;
     }
 
@@ -240,7 +243,7 @@
       outline: none;
       border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     .search-icon {
@@ -291,12 +294,121 @@
       flex: 1;
     }
 
+    /* =========================================================================
+       VISIBLE PRICING STRIP (Solves "estão escondidas e não funcionais")
+       ========================================================================= */
+    .pricing-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pricing-strip-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--surface-subtle);
+    }
+
+    .channel-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .channel-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .channel-pill:hover {
+      color: var(--text);
+      border-color: var(--border-dark);
+    }
+
+    .channel-pill.active-ml {
+      background: #fef08a;
+      color: #854d0e;
+      border-color: #facc15;
+    }
+
+    .channel-pill.active-shopee {
+      background: #ffedd5;
+      color: #9a3412;
+      border-color: #fed7aa;
+    }
+
+    .channel-pill.active-tiktok {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+
+    .channel-pill.active-shein {
+      background: #fce7f3;
+      color: #9d174d;
+      border-color: #fbcfe8;
+    }
+
+    .pricing-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .param-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .param-field input, .param-field select {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .param-field input:focus, .param-field select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+    }
+
     /* KPI Cards */
     .kpi-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .kpi-card {
@@ -335,7 +447,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 12px 16px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -374,48 +486,10 @@
       border-color: var(--primary);
     }
 
-    .channel-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 6px 12px;
-      border-radius: 7px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      background: var(--surface-subtle);
-      color: var(--text-muted);
-    }
-
-    .channel-pill.active-ml {
-      background: #fef9c3;
-      color: #854d0e;
-      border-color: #fde047;
-    }
-
-    .channel-pill.active-shopee {
-      background: #ffedd5;
-      color: #9a3412;
-      border-color: #fed7aa;
-    }
-
-    .channel-pill.active-tiktok {
-      background: #f1f5f9;
-      color: #0f172a;
-      border-color: #cbd5e1;
-    }
-
-    .channel-pill.active-shein {
-      background: #fce7f3;
-      color: #9d174d;
-      border-color: #fbcfe8;
-    }
-
     /* Product Grid */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
       gap: 16px;
     }
 
@@ -437,8 +511,18 @@
       border-color: var(--border-dark);
     }
 
-    .product-card.status-aprovado { border-color: var(--green); }
-    .product-card.status-reprovado { border-color: var(--red); opacity: 0.85; }
+    .product-card.card-viable {
+      border-color: var(--green);
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3);
+    }
+
+    .product-card.card-warn {
+      border-color: var(--amber);
+    }
+
+    .product-card.card-bad {
+      border-color: var(--red);
+    }
 
     .card-topbar {
       padding: 8px 10px;
@@ -481,7 +565,7 @@
 
     .card-thumb-wrap {
       width: 100%;
-      height: 190px;
+      height: 185px;
       background: #ffffff;
       display: flex;
       align-items: center;
@@ -489,6 +573,7 @@
       padding: 12px;
       cursor: pointer;
       border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .card-thumb-wrap img {
@@ -547,47 +632,84 @@
       color: var(--primary);
     }
 
-    .card-pricing {
+    /* Card Pricing Box */
+    .card-pricing-box {
       background: var(--surface-subtle);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 8px 10px;
       margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
     }
 
-    .price-main {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.1;
-    }
-
-    .price-sub {
-      font-size: 11px;
+    .price-col-title {
+      font-size: 10px;
+      font-weight: 700;
       color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .price-col-val {
+      font-size: 15px;
+      font-weight: 800;
       margin-top: 2px;
     }
 
-    .margin-pill {
-      display: inline-flex;
+    .price-col-val.cost { color: var(--text); }
+    .price-col-val.target { color: #0284c7; }
+
+    /* Quick Sale Input on Card */
+    .card-quick-sale {
+      display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 5px;
-      margin-top: 5px;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 8px;
     }
 
-    .margin-pill.viable { background: var(--green-light); color: var(--green-text); }
-    .margin-pill.warn { background: var(--amber-light); color: var(--amber-text); }
-    .margin-pill.bad { background: var(--red-light); color: var(--red-text); }
-    .margin-pill.neutral { background: #e2e8f0; color: var(--text-muted); }
+    .card-quick-sale label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .card-quick-sale input {
+      width: 100%;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      background: transparent;
+      outline: none;
+      text-align: right;
+    }
+
+    .margin-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .margin-pill.viable { background: var(--green-light); color: var(--green-text); border: 1px solid var(--green-border); }
+    .margin-pill.warn { background: var(--amber-light); color: var(--amber-text); border: 1px solid var(--amber-border); }
+    .margin-pill.bad { background: var(--red-light); color: var(--red-text); border: 1px solid var(--red-border); }
+    .margin-pill.neutral { background: var(--surface-subtle); color: var(--text-muted); border: 1px dashed var(--border); }
 
     .card-btn-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 6px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .btn-search-ml {
@@ -823,7 +945,7 @@
     .form-control:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
     }
 
     textarea.form-control {
@@ -1091,7 +1213,7 @@
           <button class="btn" onclick="exportAnalyzedExcel()">
             <span>📤</span> Exportar
           </button>
-          <button class="btn btn-icon" onclick="openSettingsModal()" title="Taxas & Configurações Globais">
+          <button class="btn btn-icon" onclick="openSettingsModal()" title="Mais Opções / Backup">
             <span>⚙️</span>
           </button>
         </div>
@@ -1100,6 +1222,56 @@
       <div class="content-body">
         <!-- VIEW 1: PRODUCTS CATALOG -->
         <section id="view-catalog" class="catalog-view">
+          
+          <!-- VISIBLE PRICING & TAX STRIP (Direto na tela principal, 100% reativo) -->
+          <div class="pricing-strip">
+            <div class="pricing-strip-header">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;">Canal de Venda:</span>
+                <div class="channel-pills-row">
+                  <button class="channel-pill active-ml" id="btn-chan-ml" onclick="setSimChannel('ml')">🟡 Mercado Livre</button>
+                  <button class="channel-pill" id="btn-chan-shopee" onclick="setSimChannel('shopee')">🟠 Shopee</button>
+                  <button class="channel-pill" id="btn-chan-tiktok" onclick="setSimChannel('tiktok')">⚫ TikTok Shop</button>
+                  <button class="channel-pill" id="btn-chan-shein" onclick="setSimChannel('shein')">🟣 Shein</button>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px;">
+                <label for="strip-kit" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Simular em Kit:</label>
+                <select id="strip-kit" class="select-sm" style="font-weight:700;" onchange="handleStripParamChange()">
+                  <option value="1">1 Unidade (Avulso)</option>
+                  <option value="2">Kit com 2 Unidades</option>
+                  <option value="3">Kit com 3 Unidades</option>
+                  <option value="5">Kit com 5 Unidades</option>
+                  <option value="10">Kit com 10 Unidades</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="pricing-strip-grid">
+              <div class="param-field">
+                <label>Comissão Canal (%)</label>
+                <input type="number" id="strip-comm" step="0.5" value="14" oninput="handleStripParamChange()" />
+              </div>
+              <div class="param-field">
+                <label>Taxa Fixa / Envio (R$)</label>
+                <input type="number" id="strip-fixed" step="0.5" value="6.00" oninput="handleStripParamChange()" />
+              </div>
+              <div class="param-field">
+                <label>Imposto MEI / Simples (%)</label>
+                <input type="number" id="strip-tax" step="0.5" value="4" oninput="handleStripParamChange()" />
+              </div>
+              <div class="param-field">
+                <label>Custo Embalagem (R$)</label>
+                <input type="number" id="strip-pack" step="0.5" value="1.50" oninput="handleStripParamChange()" />
+              </div>
+              <div class="param-field">
+                <label>Meta Margem Líquida (%)</label>
+                <input type="number" id="strip-target" step="1" value="15" oninput="handleStripParamChange()" />
+              </div>
+            </div>
+          </div>
+
           <!-- KPI Cards -->
           <div class="kpi-row">
             <div class="kpi-card">
@@ -1113,9 +1285,9 @@
               <div class="kpi-desc" id="kpi-sub-analyzed">0.0% do catálogo</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Margem &ge; 15%</div>
+              <div class="kpi-label">Margem &ge; Meta</div>
               <div class="kpi-value" id="kpi-viable" style="color:var(--green-text);">0</div>
-              <div class="kpi-desc">viáveis pelo cálculo</div>
+              <div class="kpi-desc" id="kpi-sub-viable">viáveis pelo cálculo</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-label">Aprovados</div>
@@ -1124,7 +1296,7 @@
             </div>
           </div>
 
-          <!-- Filter & Marketplace Switcher Row -->
+          <!-- Filter & Control Row -->
           <div class="filter-row">
             <div class="filter-left">
               <select id="f-status" class="select-sm" onchange="applyFilters(1)">
@@ -1138,9 +1310,9 @@
 
               <select id="f-margin" class="select-sm" onchange="applyFilters(1)">
                 <option value="all">Qualquer margem</option>
-                <option value="target">&ge; 15% (Meta Mínima)</option>
+                <option value="target">&ge; Meta (Viável)</option>
                 <option value="high">&ge; 20% (Alta Margem)</option>
-                <option value="low">&lt; 15% (Abaixo da Meta)</option>
+                <option value="low">&lt; Meta (Abaixo)</option>
               </select>
 
               <div style="display:flex;align-items:center;gap:4px;">
@@ -1152,17 +1324,6 @@
               <button class="btn btn-icon" id="f-fav-btn" onclick="toggleFilterFav()" style="padding:6px 10px;font-size:12px;">
                 <span id="f-fav-icon">☆</span> Favoritos
               </button>
-
-              <div style="height:20px;width:1px;background:var(--border);margin:0 4px;"></div>
-
-              <!-- Marketplace Selector -->
-              <div style="display:flex;gap:4px;align-items:center;">
-                <span style="font-size:11px;font-weight:700;color:var(--text-light);">CANAL:</span>
-                <button class="channel-pill active-ml" id="btn-chan-ml" onclick="setSimChannel('ml')">🟡 Mercado Livre</button>
-                <button class="channel-pill" id="btn-chan-shopee" onclick="setSimChannel('shopee')">🟠 Shopee</button>
-                <button class="channel-pill" id="btn-chan-tiktok" onclick="setSimChannel('tiktok')">⚫ TikTok</button>
-                <button class="channel-pill" id="btn-chan-shein" onclick="setSimChannel('shein')">🟣 Shein</button>
-              </div>
             </div>
 
             <div class="filter-right">
@@ -1369,8 +1530,8 @@
               <div id="modal-net-profit" style="font-size:13px;font-weight:700;color:var(--text-muted);margin-top:2px;">Lucro Líquido: —</div>
             </div>
             <div class="margin-stat-side">
-              <div class="side-row">Preço mín. p/ 15%: <strong id="modal-target-min-price">R$ 0,00</strong></div>
-              <div class="side-row">Custo unit. máx. p/ 15%: <strong id="modal-target-max-cost">R$ 0,00</strong></div>
+              <div class="side-row">Preço mín. p/ meta: <strong id="modal-target-min-price">R$ 0,00</strong></div>
+              <div class="side-row">Custo unit. máx. p/ meta: <strong id="modal-target-max-cost">R$ 0,00</strong></div>
               <div class="side-row" id="modal-status-verdict" style="font-weight:700;margin-top:4px;">Informe o preço médio</div>
             </div>
           </div>
@@ -1384,12 +1545,22 @@
                 <input type="number" step="0.5" id="m-comm-pct" class="form-control" oninput="recalcModalMargin()" />
               </div>
               <div class="form-group">
+                <label>Tarifa Fixa Canal (R$):</label>
+                <input type="number" step="0.5" id="m-fixed-fee" class="form-control" oninput="recalcModalMargin()" />
+              </div>
+              <div class="form-group">
+                <label>Imposto (%):</label>
+                <input type="number" step="0.5" id="m-tax-pct" class="form-control" oninput="recalcModalMargin()" />
+              </div>
+            </div>
+            <div class="data-grid-2" style="margin-top:8px;">
+              <div class="form-group">
                 <label>Frete Vendedor (R$):</label>
                 <input type="number" step="0.5" id="m-shipping-fee" class="form-control" placeholder="R$ 0,00" oninput="recalcModalMargin()" />
               </div>
               <div class="form-group">
-                <label>Tarifa Fixa Canal (R$):</label>
-                <input type="number" step="0.5" id="m-fixed-fee" class="form-control" oninput="recalcModalMargin()" />
+                <label>Embalagem / Etiqueta (R$):</label>
+                <input type="number" step="0.5" id="m-pack-fee" class="form-control" oninput="recalcModalMargin()" />
               </div>
             </div>
           </div>
@@ -1416,68 +1587,25 @@
     </div>
   </div>
 
-  <!-- MODAL: SETTINGS & FEES -->
+  <!-- MODAL: ADVANCED SETTINGS & BACKUP -->
   <div class="modal-backdrop" id="modal-settings" onclick="handleBackdropClick(event)">
-    <div class="modal-window" style="max-width:560px;">
+    <div class="modal-window" style="max-width:520px;">
       <div class="modal-header">
-        <h3 style="font-size:15px;font-weight:700;">⚙️ Taxas Globais & Parâmetros de Viabilidade</h3>
+        <h3 style="font-size:15px;font-weight:700;">⚙️ Opções do Sistema & Backup</h3>
         <button class="modal-close-btn" onclick="closeModal('modal-settings')">✕</button>
       </div>
       <div class="modal-body" style="grid-template-columns:1fr;gap:14px;">
-        <div class="data-grid-2">
-          <div class="form-group">
-            <label>Meta de Margem Contrib. (%):</label>
-            <input type="number" id="cfg-target" class="form-control" value="15" min="1" max="50" onchange="saveGlobalConfigs()" />
-          </div>
-          <div class="form-group">
-            <label>Imposto MEI / Simples (%):</label>
-            <input type="number" id="cfg-tax" class="form-control" value="4" min="0" max="25" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-        </div>
+        <p style="font-size:13px;color:var(--text-muted);">
+          Todos os parâmetros principais de precificação (Comissão, Tarifa Fixa, Imposto MEI, Embalagem e Meta de Margem) agora ficam fixos e visíveis na barra superior da tela inicial para alteração imediata!
+        </p>
 
-        <div style="font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;margin-top:6px;">Taxas Padrão por Canal:</div>
-
-        <div class="data-grid-2">
-          <div class="form-group">
-            <label>Comissão Mercado Livre (%):</label>
-            <input type="number" id="cfg-comm-ml" class="form-control" value="14" step="0.5" onchange="saveGlobalConfigs()" />
+        <div style="background:var(--surface-subtle);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;font-weight:700;color:var(--text);">Segurança & Dados:</div>
+          <p style="font-size:12px;color:var(--text-muted);">Você pode salvar cópias das suas análises ou reiniciar os produtos caso queira.</p>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn" style="flex:1;" onclick="exportBackupJson()">💾 Baixar Backup (.json)</button>
+            <button class="btn" style="flex:1;" onclick="resetToInitial()">🔄 Restaurar Produtos</button>
           </div>
-          <div class="form-group">
-            <label>Taxa Fixa ML (R$ abaixo R$ 79):</label>
-            <input type="number" id="cfg-fixed-ml" class="form-control" value="6.00" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-        </div>
-
-        <div class="data-grid-2">
-          <div class="form-group">
-            <label>Comissão Shopee (% com frete grátis):</label>
-            <input type="number" id="cfg-comm-shopee" class="form-control" value="20" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-          <div class="form-group">
-            <label>Taxa Fixa Shopee (R$ por item):</label>
-            <input type="number" id="cfg-fixed-shopee" class="form-control" value="4.00" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-        </div>
-
-        <div class="data-grid-2">
-          <div class="form-group">
-            <label>Comissão TikTok Shop (%):</label>
-            <input type="number" id="cfg-comm-tiktok" class="form-control" value="6" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-          <div class="form-group">
-            <label>Comissão Shein (%):</label>
-            <input type="number" id="cfg-comm-shein" class="form-control" value="16" step="0.5" onchange="saveGlobalConfigs()" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Custo Embalagem / Etiqueta padrão (R$):</label>
-          <input type="number" id="cfg-packaging" class="form-control" value="1.50" step="0.5" onchange="saveGlobalConfigs()" />
-        </div>
-
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-          <button class="btn" onclick="exportBackupJson()">💾 Baixar Backup (.json)</button>
-          <button class="btn" onclick="resetToInitial()">🔄 Restaurar Base Inicial</button>
         </div>
       </div>
     </div>
@@ -1587,32 +1715,63 @@
     let userAnalysis = JSON.parse(localStorage.getItem('lb_ml_analysis_v2') || '{}');
     let globalConfig = JSON.parse(localStorage.getItem('lb_config_v2') || '{}');
 
+    // Safe number helper that preserves 0 as a valid number
+    function toNum(val, defaultVal) {
+      if (val === undefined || val === null || val === '') return defaultVal;
+      const n = parseFloat(val);
+      return isNaN(n) ? defaultVal : n;
+    }
+
+    const CHANNEL_DEFAULTS = {
+      ml: { comm: 14, fixed: 6.00 },
+      shopee: { comm: 20, fixed: 4.00 },
+      tiktok: { comm: 6, fixed: 0.00 },
+      shein: { comm: 16, fixed: 0.00 }
+    };
+
     function getCfg() {
+      const defChan = CHANNEL_DEFAULTS[currentChannel] || CHANNEL_DEFAULTS.ml;
+      const savedChan = (globalConfig.channels && globalConfig.channels[currentChannel]) ? globalConfig.channels[currentChannel] : {};
+
       return {
-        target: parseFloat(globalConfig.target) || 15,
-        tax: parseFloat(globalConfig.tax) || 4,
-        commMl: parseFloat(globalConfig.commMl) || 14,
-        fixedMl: parseFloat(globalConfig.fixedMl) || 6.00,
-        commShopee: parseFloat(globalConfig.commShopee) || 20,
-        fixedShopee: parseFloat(globalConfig.fixedShopee) || 4.00,
-        commTiktok: parseFloat(globalConfig.commTiktok) || 6,
-        commShein: parseFloat(globalConfig.commShein) || 16,
-        packaging: parseFloat(globalConfig.packaging) || 1.50
+        target: toNum(globalConfig.target, 15),
+        tax: toNum(globalConfig.tax, 4),
+        comm: toNum(savedChan.comm, defChan.comm),
+        fixed: toNum(savedChan.fixed, defChan.fixed),
+        packaging: toNum(globalConfig.packaging, 1.50),
+        kit: parseInt(globalConfig.kit, 10) || 1
       };
     }
 
-    function saveGlobalConfigs() {
-      globalConfig.target = parseFloat(document.getElementById('cfg-target').value) || 15;
-      globalConfig.tax = parseFloat(document.getElementById('cfg-tax').value) || 4;
-      globalConfig.commMl = parseFloat(document.getElementById('cfg-comm-ml').value) || 14;
-      globalConfig.fixedMl = parseFloat(document.getElementById('cfg-fixed-ml').value) || 6.00;
-      globalConfig.commShopee = parseFloat(document.getElementById('cfg-comm-shopee').value) || 20;
-      globalConfig.fixedShopee = parseFloat(document.getElementById('cfg-fixed-shopee').value) || 4.00;
-      globalConfig.commTiktok = parseFloat(document.getElementById('cfg-comm-tiktok').value) || 6;
-      globalConfig.commShein = parseFloat(document.getElementById('cfg-comm-shein').value) || 16;
-      globalConfig.packaging = parseFloat(document.getElementById('cfg-packaging').value) || 1.50;
+    function syncStripUI() {
+      const cfg = getCfg();
+      document.getElementById('strip-comm').value = cfg.comm;
+      document.getElementById('strip-fixed').value = cfg.fixed;
+      document.getElementById('strip-tax').value = cfg.tax;
+      document.getElementById('strip-pack').value = cfg.packaging;
+      document.getElementById('strip-target').value = cfg.target;
+      document.getElementById('strip-kit').value = cfg.kit.toString();
+    }
+
+    function handleStripParamChange() {
+      const comm = toNum(document.getElementById('strip-comm').value, 14);
+      const fixed = toNum(document.getElementById('strip-fixed').value, 6.0);
+      const tax = toNum(document.getElementById('strip-tax').value, 4.0);
+      const pack = toNum(document.getElementById('strip-pack').value, 1.5);
+      const target = toNum(document.getElementById('strip-target').value, 15.0);
+      const kit = parseInt(document.getElementById('strip-kit').value, 10) || 1;
+
+      globalConfig.tax = tax;
+      globalConfig.target = target;
+      globalConfig.packaging = pack;
+      globalConfig.kit = kit;
+
+      if (!globalConfig.channels) globalConfig.channels = {};
+      globalConfig.channels[currentChannel] = { comm, fixed };
 
       localStorage.setItem('lb_config_v2', JSON.stringify(globalConfig));
+
+      // Instant dynamic recalculation across whole catalog and KPIs
       applyFilters(currentPage);
     }
 
@@ -1625,18 +1784,7 @@
         products = INITIAL_PRODUCTS;
       }
 
-      // Init UI config inputs
-      const cfg = getCfg();
-      document.getElementById('cfg-target').value = cfg.target;
-      document.getElementById('cfg-tax').value = cfg.tax;
-      document.getElementById('cfg-comm-ml').value = cfg.commMl;
-      document.getElementById('cfg-fixed-ml').value = cfg.fixedMl;
-      document.getElementById('cfg-comm-shopee').value = cfg.commShopee;
-      document.getElementById('cfg-fixed-shopee').value = cfg.fixedShopee;
-      document.getElementById('cfg-comm-tiktok').value = cfg.commTiktok;
-      document.getElementById('cfg-comm-shein').value = cfg.commShein;
-      document.getElementById('cfg-packaging').value = cfg.packaging;
-
+      syncStripUI();
       renderSupplierSelects();
       renderSidebarNiches();
       renderSuppliersView();
@@ -1653,41 +1801,43 @@
     }
 
     // Metric Calculations for Product in Selected Channel
-    function computeProductMetrics(p, channel = currentChannel, kitQty = 1) {
+    function computeProductMetrics(p, channel = currentChannel) {
       const cfg = getCfg();
       const st = userAnalysis[p.id] || {};
       const chanData = (st.channels && st.channels[channel]) ? st.channels[channel] : {};
 
-      let commPct = cfg.commMl;
-      let fixedFee = cfg.fixedMl;
-      if (channel === 'shopee') { commPct = cfg.commShopee; fixedFee = cfg.fixedShopee; }
-      else if (channel === 'tiktok') { commPct = cfg.commTiktok; fixedFee = 0; }
-      else if (channel === 'shein') { commPct = cfg.commShein; fixedFee = 0; }
+      const commPct = chanData.commPct !== undefined && chanData.commPct !== '' ? toNum(chanData.commPct, cfg.comm) : cfg.comm;
+      const fixedFee = chanData.fixedFee !== undefined && chanData.fixedFee !== '' ? toNum(chanData.fixedFee, cfg.fixed) : cfg.fixed;
+      const taxPct = chanData.taxPct !== undefined && chanData.taxPct !== '' ? toNum(chanData.taxPct, cfg.tax) : cfg.tax;
+      const packagingFee = chanData.packagingFee !== undefined && chanData.packagingFee !== '' ? toNum(chanData.packagingFee, cfg.packaging) : cfg.packaging;
+      const shippingFee = toNum(chanData.shippingFee, 0);
 
-      if (chanData.commPct !== undefined && chanData.commPct !== '') commPct = parseFloat(chanData.commPct);
-      if (chanData.fixedFee !== undefined && chanData.fixedFee !== '') fixedFee = parseFloat(chanData.fixedFee);
-      const shippingFee = parseFloat(chanData.shippingFee) || 0;
-      const packagingFee = cfg.packaging;
-
-      const unitCost = p.u * kitQty;
-      const denom = 1 - ((commPct + cfg.tax + cfg.target) / 100);
+      const unitCost = p.u * cfg.kit;
+      const denom = 1.0 - ((commPct + taxPct + cfg.target) / 100.0);
       const minSalePrice = denom > 0.05 ? (unitCost + fixedFee + shippingFee + packagingFee) / denom : unitCost * 2.5;
 
-      const salePrice = parseFloat(chanData.salePrice || st.mlPrice);
+      const salePrice = chanData.salePrice !== undefined && chanData.salePrice !== '' ? parseFloat(chanData.salePrice) : (channel === 'ml' && st.mlPrice ? parseFloat(st.mlPrice) : null);
       let netProfit = null;
       let marginPct = null;
 
-      if (!isNaN(salePrice) && salePrice > 0) {
-        const totalFees = (salePrice * (commPct / 100)) + (salePrice * (cfg.tax / 100)) + fixedFee + shippingFee + packagingFee;
+      if (salePrice !== null && !isNaN(salePrice) && salePrice > 0) {
+        const totalFees = (salePrice * (commPct / 100.0)) + (salePrice * (taxPct / 100.0)) + fixedFee + shippingFee + packagingFee;
         netProfit = salePrice - unitCost - totalFees;
-        marginPct = (netProfit / salePrice) * 100;
+        marginPct = (netProfit / salePrice) * 100.0;
       }
 
-      const status = st.status || (marginPct !== null ? (marginPct >= cfg.target ? 'aprovado' : 'reprovado') : 'nao_analisado');
+      let status = st.status;
+      if (!status || status === 'nao_analisado') {
+        if (marginPct !== null) {
+          status = marginPct >= cfg.target ? 'aprovado' : 'reprovado';
+        } else {
+          status = 'nao_analisado';
+        }
+      }
 
       return {
         unitCost,
-        salePrice: !isNaN(salePrice) && salePrice > 0 ? salePrice : null,
+        salePrice: (salePrice !== null && !isNaN(salePrice) && salePrice > 0) ? salePrice : null,
         minSalePrice,
         netProfit,
         marginPct,
@@ -1695,7 +1845,9 @@
         fav: !!st.fav,
         commPct,
         fixedFee,
-        shippingFee
+        taxPct,
+        shippingFee,
+        packagingFee
       };
     }
 
@@ -1758,6 +1910,7 @@
         const btn = document.getElementById(`btn-chan-${c}`);
         btn.className = `channel-pill ${c === chan ? `active-${c}` : ''}`;
       });
+      syncStripUI();
       applyFilters(currentPage);
     }
 
@@ -1843,6 +1996,7 @@
       document.getElementById('kpi-analyzed').textContent = analyzed.toLocaleString('pt-BR');
       document.getElementById('kpi-sub-analyzed').textContent = `${pctAnalyzed}% do catálogo`;
       document.getElementById('kpi-viable').textContent = viable.toLocaleString('pt-BR');
+      document.getElementById('kpi-sub-viable').textContent = `margem &ge; ${cfg.target}%`;
       document.getElementById('kpi-approved').textContent = approved.toLocaleString('pt-BR');
     }
 
@@ -1891,7 +2045,7 @@
           <div style="text-align:center;padding:60px 20px;background:#fff;border-radius:12px;border:1px solid var(--border);color:var(--text-muted);">
             <div style="font-size:32px;">🔍</div>
             <div style="font-size:15px;font-weight:700;margin-top:8px;">Nenhum produto encontrado com estes filtros.</div>
-            <div style="font-size:12px;margin-top:4px;">Tente redefinir a busca ou selecionar outro nicho/fornecedor.</div>
+            <div style="font-size:12px;margin-top:4px;">Tente redefinir a busca ou ajustar os valores de custo/margem.</div>
           </div>
         `;
         return;
@@ -1904,11 +2058,80 @@
       }
     }
 
+    // Quick direct price input from card
+    function handleCardPriceInput(id, val) {
+      if (!userAnalysis[id]) userAnalysis[id] = { channels: {} };
+      if (!userAnalysis[id].channels) userAnalysis[id].channels = {};
+      if (!userAnalysis[id].channels[currentChannel]) userAnalysis[id].channels[currentChannel] = {};
+
+      userAnalysis[id].channels[currentChannel].salePrice = val;
+      if (currentChannel === 'ml') {
+        userAnalysis[id].mlPrice = val;
+      }
+
+      const p = products.find(x => x.id === id);
+      if (p) {
+        const m = computeProductMetrics(p, currentChannel);
+        userAnalysis[id].status = m.status;
+      }
+
+      localStorage.setItem('lb_ml_analysis_v2', JSON.stringify(userAnalysis));
+
+      // Fast DOM update for the specific card
+      const card = document.getElementById(`card-${id}`);
+      if (card && p) {
+        const m = computeProductMetrics(p, currentChannel);
+        const cfg = getCfg();
+        const pillContainer = card.querySelector('.card-margin-pill-slot');
+        const badgeElem = card.querySelector('.status-badge');
+
+        card.className = `product-card ${m.marginPct !== null ? (m.marginPct >= cfg.target ? 'card-viable' : (m.marginPct >= 10 ? 'card-warn' : 'card-bad')) : ''}`;
+
+        const statusLabels = {
+          nao_analisado: { label: 'Não analisado', cls: 'pending' },
+          em_analise: { label: 'Em análise', cls: 'analyzing' },
+          aprovado: { label: 'Aprovado', cls: 'approved' },
+          reprovado: { label: 'Reprovado', cls: 'rejected' },
+          descartado: { label: 'Descartado', cls: 'discarded' }
+        };
+        const stObj = statusLabels[m.status] || statusLabels.nao_analisado;
+        if (badgeElem) {
+          badgeElem.className = `status-badge ${stObj.cls}`;
+          badgeElem.textContent = `● ${stObj.label}`;
+        }
+
+        if (pillContainer) {
+          if (m.marginPct !== null) {
+            const cls = m.marginPct >= cfg.target ? 'viable' : (m.marginPct >= 10 ? 'warn' : 'bad');
+            pillContainer.innerHTML = `
+              <span class="margin-pill ${cls}">
+                <span>${m.marginPct >= cfg.target ? '✅' : '⚠️'} ${m.marginPct.toFixed(1)}%</span>
+                <span>Lucro: R$ ${m.netProfit.toFixed(2).replace('.', ',')}</span>
+              </span>
+            `;
+          } else {
+            pillContainer.innerHTML = `<span class="margin-pill neutral"><span>Aguardando preço</span><span>Meta: ${cfg.target}%</span></span>`;
+          }
+        }
+      }
+
+      // Update KPI counters smoothly
+      updateKPIs(getCfg());
+    }
+
     function renderCardHtml(p) {
       const m = computeProductMetrics(p, currentChannel);
+      const cfg = getCfg();
       const imgSrc = p.img ? `img/${p.img}.webp` : getPlaceholderSvg(p.cn);
-      const mlUrl = `https://lista.mercadolivre.com.br/${encodeURIComponent(p.cn)}`;
-      const shopeeUrl = `https://shopee.com.br/search?keyword=${encodeURIComponent(p.cn)}`;
+      
+      const searchUrls = {
+        ml: `https://lista.mercadolivre.com.br/${encodeURIComponent(p.cn)}`,
+        shopee: `https://shopee.com.br/search?keyword=${encodeURIComponent(p.cn)}`,
+        tiktok: `https://www.tiktok.com/search?q=${encodeURIComponent(p.cn)}`,
+        shein: `https://www.shein.com/pdsearch/${encodeURIComponent(p.cn)}`
+      };
+      const searchUrl = searchUrls[currentChannel] || searchUrls.ml;
+      const searchLabel = currentChannel === 'shopee' ? 'Buscar Shopee' : (currentChannel === 'tiktok' ? 'Buscar TikTok' : (currentChannel === 'shein' ? 'Buscar Shein' : 'Buscar no ML'));
 
       const statusLabels = {
         nao_analisado: { label: 'Não analisado', cls: 'pending' },
@@ -1919,14 +2142,24 @@
       };
       const stObj = statusLabels[m.status] || statusLabels.nao_analisado;
 
-      let marginPill = `<span class="margin-pill neutral">Mín. ${currentChannel.toUpperCase()}: R$ ${m.minSalePrice.toFixed(2).replace('.', ',')}</span>`;
+      let cardClass = 'product-card';
       if (m.marginPct !== null) {
-        const cls = m.marginPct >= 15 ? 'viable' : (m.marginPct >= 10 ? 'warn' : 'bad');
-        marginPill = `<span class="margin-pill ${cls}">${m.marginPct >= 15 ? '✅' : '⚠️'} ${m.marginPct.toFixed(1)}% (R$ ${m.netProfit.toFixed(2).replace('.', ',')})</span>`;
+        cardClass += m.marginPct >= cfg.target ? ' card-viable' : (m.marginPct >= 10 ? ' card-warn' : ' card-bad');
+      }
+
+      let marginPillHtml = `<span class="margin-pill neutral"><span>Aguardando preço</span><span>Meta: ${cfg.target}%</span></span>`;
+      if (m.marginPct !== null) {
+        const cls = m.marginPct >= cfg.target ? 'viable' : (m.marginPct >= 10 ? 'warn' : 'bad');
+        marginPillHtml = `
+          <span class="margin-pill ${cls}">
+            <span>${m.marginPct >= cfg.target ? '✅' : '⚠️'} ${m.marginPct.toFixed(1)}%</span>
+            <span>Lucro: R$ ${m.netProfit.toFixed(2).replace('.', ',')}</span>
+          </span>
+        `;
       }
 
       return `
-        <article class="product-card status-${m.status}" id="card-${p.id}">
+        <article class="${cardClass}" id="card-${p.id}">
           <div class="card-topbar">
             <span class="status-badge ${stObj.cls}">● ${stObj.label}</span>
             <button class="star-btn ${m.fav ? 'active' : ''}" onclick="toggleCardFav(${p.id})">${m.fav ? '★' : '☆'}</button>
@@ -1946,19 +2179,32 @@
               ${p.cn}
             </div>
 
-            <div class="card-pricing">
-              <div class="price-main">R$ ${p.u.toFixed(2).replace('.', ',')}</div>
-              <div class="price-sub">
-                ${p.b ? `📦 Caixa c/ ${p.q} un. (R$ ${p.p.toFixed(2).replace('.', ',')})` : 'Unidade avulsa'}
+            <div class="card-pricing-box">
+              <div>
+                <div class="price-col-title">Custo ${cfg.kit > 1 ? `(Kit ${cfg.kit}x)` : 'Unitário'}</div>
+                <div class="price-col-val cost">R$ ${m.unitCost.toFixed(2).replace('.', ',')}</div>
               </div>
-              <div>${marginPill}</div>
+              <div style="text-align:right;">
+                <div class="price-col-title">Mín. Sugerido</div>
+                <div class="price-col-val target">R$ ${m.minSalePrice.toFixed(2).replace('.', ',')}</div>
+              </div>
+            </div>
+
+            <!-- Quick Sale Price Input -->
+            <div class="card-quick-sale">
+              <label>Preço Venda (R$):</label>
+              <input type="number" step="0.01" placeholder="Ex: ${m.minSalePrice.toFixed(0)}.00" value="${m.salePrice || ''}" oninput="handleCardPriceInput(${p.id}, this.value)" />
+            </div>
+
+            <div class="card-margin-pill-slot">
+              ${marginPillHtml}
             </div>
 
             <div class="card-btn-row">
-              <a class="btn-search-ml" href="${mlUrl}" target="_blank" rel="noopener">
-                <span>🔍</span> Buscar no ML
+              <a class="btn-search-ml" href="${searchUrl}" target="_blank" rel="noopener">
+                <span>🔍</span> ${searchLabel}
               </a>
-              <button class="btn-open-modal" onclick="openProductModal(${p.id})" title="Ver Análise Completa">
+              <button class="btn-open-modal" onclick="openProductModal(${p.id})" title="Ver Análise Detalhada">
                 Analisar
               </button>
             </div>
@@ -1968,6 +2214,7 @@
     }
 
     function renderTableHtml(slice) {
+      const cfg = getCfg();
       return `
         <div class="table-card">
           <table>
@@ -1977,10 +2224,10 @@
                 <th>Produto</th>
                 <th>Fornecedor</th>
                 <th>Nicho</th>
-                <th>Custo Unit.</th>
-                <th>Mínimo Sugerido</th>
-                <th>Preço Informado</th>
-                <th>Margem (%)</th>
+                <th>Custo ${cfg.kit > 1 ? `(Kit ${cfg.kit}x)` : 'Unit.'}</th>
+                <th>Mín. Sugerido (${cfg.target}%)</th>
+                <th>Preço de Venda</th>
+                <th>Margem Real</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
@@ -1991,7 +2238,7 @@
                 const imgSrc = p.img ? `img/${p.img}.webp` : getPlaceholderSvg(p.cn);
                 const mlUrl = `https://lista.mercadolivre.com.br/${encodeURIComponent(p.cn)}`;
                 const marginTxt = m.marginPct !== null
-                  ? `<strong style="color:${m.marginPct >= 15 ? 'var(--green-text)' : (m.marginPct >= 10 ? 'var(--amber-text)' : 'var(--red-text)')};">${m.marginPct.toFixed(1)}% (R$ ${m.netProfit.toFixed(2)})</strong>`
+                  ? `<strong style="color:${m.marginPct >= cfg.target ? 'var(--green-text)' : (m.marginPct >= 10 ? 'var(--amber-text)' : 'var(--red-text)')};">${m.marginPct.toFixed(1)}% (R$ ${m.netProfit.toFixed(2)})</strong>`
                   : '<span style="color:var(--text-light)">—</span>';
                 return `
                   <tr>
@@ -2002,15 +2249,17 @@
                     </td>
                     <td><span class="card-supplier">${p.sup || 'LB'}</span></td>
                     <td><span style="font-size:11.5px;color:var(--text-muted);">${p.c}</span></td>
-                    <td style="font-weight:700;">R$ ${p.u.toFixed(2).replace('.', ',')}</td>
-                    <td style="color:var(--text-muted);">R$ ${m.minSalePrice.toFixed(2).replace('.', ',')}</td>
-                    <td>${m.salePrice ? `R$ ${m.salePrice.toFixed(2)}` : '—'}</td>
+                    <td style="font-weight:700;">R$ ${m.unitCost.toFixed(2).replace('.', ',')}</td>
+                    <td style="color:#0284c7;font-weight:700;">R$ ${m.minSalePrice.toFixed(2).replace('.', ',')}</td>
+                    <td>
+                      <input type="number" step="0.01" style="width:90px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;font-weight:700;" placeholder="R$" value="${m.salePrice || ''}" oninput="handleCardPriceInput(${p.id}, this.value)" />
+                    </td>
                     <td>${marginTxt}</td>
                     <td><span class="status-badge ${m.status === 'aprovado' ? 'approved' : (m.status === 'reprovado' ? 'rejected' : 'pending')}">${m.status}</span></td>
                     <td>
                       <div style="display:flex;gap:6px;">
                         <a class="btn btn-ml" style="padding:4px 8px;font-size:11px;" href="${mlUrl}" target="_blank">ML</a>
-                        <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="openProductModal(${p.id})">Editar</button>
+                        <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="openProductModal(${p.id})">Analisar</button>
                       </div>
                     </td>
                   </tr>
@@ -2072,7 +2321,9 @@
       document.getElementById('modal-box-cost').textContent = `R$ ${p.p.toFixed(2).replace('.', ',')}`;
       document.getElementById('modal-box-qty').textContent = p.b ? `${p.q} un.` : '1 un.';
       document.getElementById('modal-unit-cost').textContent = `R$ ${p.u.toFixed(2).replace('.', ',')}`;
-      document.getElementById('modal-kit-select').value = "1";
+
+      const cfg = getCfg();
+      document.getElementById('modal-kit-select').value = cfg.kit.toString();
 
       // Status
       modalSelectedStatus = st.status || 'nao_analisado';
@@ -2118,12 +2369,7 @@
       const chanData = (st.channels && st.channels[chan]) ? st.channels[chan] : {};
       const cfg = getCfg();
 
-      // Set default commission / fixed fee based on channel if empty
-      let defComm = cfg.commMl;
-      let defFixed = cfg.fixedMl;
-      if (chan === 'shopee') { defComm = cfg.commShopee; defFixed = cfg.fixedShopee; }
-      else if (chan === 'tiktok') { defComm = cfg.commTiktok; defFixed = 0; }
-      else if (chan === 'shein') { defComm = cfg.commShein; defFixed = 0; }
+      const defChan = CHANNEL_DEFAULTS[chan] || CHANNEL_DEFAULTS.ml;
 
       document.getElementById('m-price-sale').value = chanData.salePrice || (chan === 'ml' && st.mlPrice ? st.mlPrice : '');
       document.getElementById('m-price-min').value = chanData.minPrice || '';
@@ -2135,9 +2381,11 @@
       document.getElementById('m-pct-full').value = chanData.pctFull || '';
       document.getElementById('m-ad-type').value = chanData.adType || 'classico';
 
-      document.getElementById('m-comm-pct').value = chanData.commPct !== undefined ? chanData.commPct : defComm;
+      document.getElementById('m-comm-pct').value = chanData.commPct !== undefined && chanData.commPct !== '' ? chanData.commPct : (cfg.comm || defChan.comm);
+      document.getElementById('m-fixed-fee').value = chanData.fixedFee !== undefined && chanData.fixedFee !== '' ? chanData.fixedFee : (cfg.fixed !== undefined ? cfg.fixed : defChan.fixed);
+      document.getElementById('m-tax-pct').value = chanData.taxPct !== undefined && chanData.taxPct !== '' ? chanData.taxPct : cfg.tax;
+      document.getElementById('m-pack-fee').value = chanData.packagingFee !== undefined && chanData.packagingFee !== '' ? chanData.packagingFee : cfg.packaging;
       document.getElementById('m-shipping-fee').value = chanData.shippingFee || '';
-      document.getElementById('m-fixed-fee').value = chanData.fixedFee !== undefined ? chanData.fixedFee : defFixed;
 
       document.getElementById('m-ref-url').value = chanData.refUrl || '';
       document.getElementById('m-notes').value = st.notes || '';
@@ -2160,26 +2408,28 @@
       const kitQty = parseInt(document.getElementById('modal-kit-select').value) || 1;
       const unitCost = p.u * kitQty;
 
-      const commPct = parseFloat(document.getElementById('m-comm-pct').value) || 0;
-      const fixedFee = parseFloat(document.getElementById('m-fixed-fee').value) || 0;
-      const shippingFee = parseFloat(document.getElementById('m-shipping-fee').value) || 0;
-      const packagingFee = cfg.packaging;
+      const commPct = toNum(document.getElementById('m-comm-pct').value, cfg.comm);
+      const fixedFee = toNum(document.getElementById('m-fixed-fee').value, cfg.fixed);
+      const taxPct = toNum(document.getElementById('m-tax-pct').value, cfg.tax);
+      const packagingFee = toNum(document.getElementById('m-pack-fee').value, cfg.packaging);
+      const shippingFee = toNum(document.getElementById('m-shipping-fee').value, 0);
+
       const salePrice = parseFloat(document.getElementById('m-price-sale').value);
 
-      // Target Min Price for 15%
-      const denom = 1 - ((commPct + cfg.tax + cfg.target) / 100);
+      // Target Min Price for meta %
+      const denom = 1.0 - ((commPct + taxPct + cfg.target) / 100.0);
       const minSalePrice = denom > 0.05 ? (unitCost + fixedFee + shippingFee + packagingFee) / denom : unitCost * 2.5;
       document.getElementById('modal-target-min-price').textContent = `R$ ${minSalePrice.toFixed(2).replace('.', ',')}`;
 
       // Target Max Unit Cost
       if (!isNaN(salePrice) && salePrice > 0) {
-        const targetProfit = salePrice * (cfg.target / 100);
-        const fees = (salePrice * (commPct / 100)) + (salePrice * (cfg.tax / 100)) + fixedFee + shippingFee + packagingFee;
+        const targetProfit = salePrice * (cfg.target / 100.0);
+        const fees = (salePrice * (commPct / 100.0)) + (salePrice * (taxPct / 100.0)) + fixedFee + shippingFee + packagingFee;
         const maxCost = salePrice - targetProfit - fees;
         document.getElementById('modal-target-max-cost').textContent = `R$ ${Math.max(0, maxCost).toFixed(2).replace('.', ',')}`;
 
         const netProfit = salePrice - unitCost - fees;
-        const marginPct = (netProfit / salePrice) * 100;
+        const marginPct = (netProfit / salePrice) * 100.0;
 
         const valElem = document.getElementById('modal-margin-pct');
         valElem.textContent = `${marginPct.toFixed(1)}%`;
@@ -2190,7 +2440,7 @@
         const verdictElem = document.getElementById('modal-status-verdict');
         if (marginPct >= cfg.target) {
           valElem.style.color = 'var(--green-text)';
-          verdictElem.textContent = '✅ Margem aceitável (> 15%)';
+          verdictElem.textContent = `✅ Margem viável (&ge; ${cfg.target}%)`;
           verdictElem.style.color = 'var(--green-text)';
         } else if (marginPct >= 10) {
           valElem.style.color = 'var(--amber-text)';
@@ -2206,7 +2456,7 @@
         document.getElementById('modal-margin-pct').style.color = 'var(--text-light)';
         document.getElementById('modal-net-profit').textContent = 'Lucro Líquido: —';
         document.getElementById('modal-target-max-cost').textContent = '—';
-        document.getElementById('modal-status-verdict').textContent = 'Informe o preço médio de venda';
+        document.getElementById('modal-status-verdict').textContent = 'Informe o preço de venda';
         document.getElementById('modal-status-verdict').style.color = 'var(--text-muted)';
       }
     }
@@ -2235,8 +2485,10 @@
         pctFull: document.getElementById('m-pct-full').value,
         adType: document.getElementById('m-ad-type').value,
         commPct: document.getElementById('m-comm-pct').value,
-        shippingFee: document.getElementById('m-shipping-fee').value,
         fixedFee: document.getElementById('m-fixed-fee').value,
+        taxPct: document.getElementById('m-tax-pct').value,
+        packagingFee: document.getElementById('m-pack-fee').value,
+        shippingFee: document.getElementById('m-shipping-fee').value,
         refUrl: document.getElementById('m-ref-url').value.trim()
       };
 
@@ -2393,6 +2645,7 @@
     function handleBackdropClick(e) { if (e.target.classList.contains('modal-backdrop')) e.target.classList.remove('open'); }
 
     function exportAnalyzedExcel() {
+      const cfg = getCfg();
       const exportRows = filteredProducts.map(p => {
         const m = computeProductMetrics(p, currentChannel);
         const st = userAnalysis[p.id] || {};
@@ -2407,13 +2660,19 @@
           'Embalagem': p.b ? `Caixa Fechada (${p.q} un.)` : 'Avulso',
           'Custo Planilha (R$)': p.p,
           'Qtd Caixa': p.q,
-          'Custo Unitário (R$)': p.u,
+          'Custo Base (R$)': p.u,
+          'Simulação Kit': `${cfg.kit}x`,
+          'Custo Total Venda (R$)': Number(m.unitCost.toFixed(2)),
           'Preço Mín. Sugerido (R$)': Number(m.minSalePrice.toFixed(2)),
-          'Preço Médio Venda (R$)': m.salePrice || '',
+          'Preço Venda Informado (R$)': m.salePrice || '',
           'Lucro Líquido (R$)': m.netProfit !== null ? Number(m.netProfit.toFixed(2)) : '',
           'Margem (%)': m.marginPct !== null ? Number(m.marginPct.toFixed(2)) : '',
           'Status Viabilidade': m.status,
           'Favorito': m.fav ? 'SIM' : 'NÃO',
+          'Comissão Aplicada (%)': m.commPct,
+          'Imposto Aplicado (%)': m.taxPct,
+          'Tarifa Fixa (R$)': m.fixedFee,
+          'Embalagem (R$)': m.packagingFee,
           'Vendas Recentes (30d)': chanData.sales30d || '',
           'Vendas Líder': chanData.salesLeader || '',
           'Logística': chanData.logistics || '',
@@ -2439,7 +2698,7 @@
     }
 
     function resetToInitial() {
-      if (!confirm('Deseja restaurar o catálogo para os 2.517 produtos originais? Suas análises serão mantidas.')) return;
+      if (!confirm('Deseja restaurar o catálogo para os 2.517 produtos originais? Suas análises salvas serão mantidas.')) return;
       localStorage.removeItem('lb_custom_catalog_v3');
       products = INITIAL_PRODUCTS;
       closeModal('modal-settings');
