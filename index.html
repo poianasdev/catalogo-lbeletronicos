@@ -1249,13 +1249,20 @@
             </div>
 
             <div class="pricing-strip-grid">
+              <div class="param-field" id="field-ml-mode">
+                <label>Regra Custo Fixo ML</label>
+                <select id="strip-ml-mode" onchange="handleStripParamChange()">
+                  <option value="auto" selected>⚡ Faixas Oficiais ML (Auto)</option>
+                  <option value="manual">✏️ Valor Fixo Manual</option>
+                </select>
+              </div>
               <div class="param-field">
                 <label>Comissão Canal (%)</label>
                 <input type="number" id="strip-comm" step="0.5" value="14" oninput="handleStripParamChange()" />
               </div>
-              <div class="param-field">
-                <label>Taxa Fixa / Envio (R$)</label>
-                <input type="number" id="strip-fixed" step="0.5" value="6.00" oninput="handleStripParamChange()" />
+              <div class="param-field" id="field-strip-fixed">
+                <label id="lbl-strip-fixed">Frete Grátis &ge; R$79 (R$)</label>
+                <input type="number" id="strip-fixed" step="0.5" value="0.00" oninput="handleStripParamChange()" title="No modo Automático ML: custo de frete grátis acima de R$ 79 (deixe 0 se quiser simular apenas a isenção de taxa fixa). No modo Manual: taxa fixa única." />
               </div>
               <div class="param-field">
                 <label>Imposto MEI / Simples (%)</label>
@@ -1546,7 +1553,7 @@
               </div>
               <div class="form-group">
                 <label>Tarifa Fixa Canal (R$):</label>
-                <input type="number" step="0.5" id="m-fixed-fee" class="form-control" oninput="recalcModalMargin()" />
+                <input type="number" step="0.5" id="m-fixed-fee" class="form-control" oninput="recalcModalMargin(true)" />
               </div>
               <div class="form-group">
                 <label>Imposto (%):</label>
@@ -1723,21 +1730,31 @@
     }
 
     const CHANNEL_DEFAULTS = {
-      ml: { comm: 14, fixed: 6.00 },
-      shopee: { comm: 20, fixed: 4.00 },
-      tiktok: { comm: 6, fixed: 0.00 },
-      shein: { comm: 16, fixed: 0.00 }
+      ml: { comm: 14, fixed: 0.00, mode: 'auto' },
+      shopee: { comm: 20, fixed: 4.00, mode: 'manual' },
+      tiktok: { comm: 6, fixed: 0.00, mode: 'manual' },
+      shein: { comm: 16, fixed: 0.00, mode: 'manual' }
     };
+
+    function getMlTieredFee(price) {
+      if (price < 12.50) return price * 0.50;
+      if (price < 29.00) return 6.25;
+      if (price < 50.00) return 6.50;
+      if (price < 79.00) return 6.75;
+      return 0.00; // Acima de R$ 79 não existe custo fixo
+    }
 
     function getCfg() {
       const defChan = CHANNEL_DEFAULTS[currentChannel] || CHANNEL_DEFAULTS.ml;
       const savedChan = (globalConfig.channels && globalConfig.channels[currentChannel]) ? globalConfig.channels[currentChannel] : {};
+      const mlMode = currentChannel === 'ml' ? (savedChan.mode || 'auto') : 'manual';
 
       return {
         target: toNum(globalConfig.target, 15),
         tax: toNum(globalConfig.tax, 4),
         comm: toNum(savedChan.comm, defChan.comm),
         fixed: toNum(savedChan.fixed, defChan.fixed),
+        mlMode: mlMode,
         packaging: toNum(globalConfig.packaging, 1.50),
         kit: parseInt(globalConfig.kit, 10) || 1
       };
@@ -1745,6 +1762,16 @@
 
     function syncStripUI() {
       const cfg = getCfg();
+      const modeField = document.getElementById('field-ml-mode');
+      const lblFixed = document.getElementById('lbl-strip-fixed');
+      if (currentChannel === 'ml') {
+        modeField.style.display = 'block';
+        document.getElementById('strip-ml-mode').value = cfg.mlMode;
+        lblFixed.innerHTML = cfg.mlMode === 'auto' ? 'Frete ML &ge; R$79 (R$)' : 'Taxa Fixa Manual (R$)';
+      } else {
+        modeField.style.display = 'none';
+        lblFixed.textContent = 'Taxa Fixa / Envio (R$)';
+      }
       document.getElementById('strip-comm').value = cfg.comm;
       document.getElementById('strip-fixed').value = cfg.fixed;
       document.getElementById('strip-tax').value = cfg.tax;
@@ -1754,8 +1781,9 @@
     }
 
     function handleStripParamChange() {
+      const mlMode = currentChannel === 'ml' ? document.getElementById('strip-ml-mode').value : 'manual';
       const comm = toNum(document.getElementById('strip-comm').value, 14);
-      const fixed = toNum(document.getElementById('strip-fixed').value, 6.0);
+      const fixed = toNum(document.getElementById('strip-fixed').value, 0.0);
       const tax = toNum(document.getElementById('strip-tax').value, 4.0);
       const pack = toNum(document.getElementById('strip-pack').value, 1.5);
       const target = toNum(document.getElementById('strip-target').value, 15.0);
@@ -1767,11 +1795,10 @@
       globalConfig.kit = kit;
 
       if (!globalConfig.channels) globalConfig.channels = {};
-      globalConfig.channels[currentChannel] = { comm, fixed };
+      globalConfig.channels[currentChannel] = { comm, fixed, mode: mlMode };
 
       localStorage.setItem('lb_config_v2', JSON.stringify(globalConfig));
-
-      // Instant dynamic recalculation across whole catalog and KPIs
+      syncStripUI();
       applyFilters(currentPage);
     }
 
@@ -1790,7 +1817,6 @@
       renderSuppliersView();
       applyFilters(1);
 
-      // Keyboard navigation for modal
       window.addEventListener('keydown', (e) => {
         if (!document.getElementById('modal-product').classList.contains('open')) return;
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -1800,6 +1826,34 @@
       });
     }
 
+    function solveMinPriceMlAuto(unitCost, commPct, taxPct, targetPct, packagingFee, shipOver79) {
+      const denom = 1.0 - ((commPct + taxPct + targetPct) / 100.0);
+      if (denom <= 0.05) return unitCost * 2.5;
+
+      // Faixa 0: < R$ 12,50 (custo fixo = 50% do valor da venda)
+      const denomUnder1250 = denom - 0.50;
+      if (denomUnder1250 > 0.01) {
+        const p0 = (unitCost + packagingFee) / denomUnder1250;
+        if (p0 < 12.50) return p0;
+      }
+
+      // Faixa 1: R$ 12,50 a R$ 28,99 (R$ 6,25)
+      const p1 = (unitCost + 6.25 + packagingFee) / denom;
+      if (p1 < 29.00) return Math.max(12.50, p1);
+
+      // Faixa 2: R$ 29,00 a R$ 49,99 (R$ 6,50)
+      const p2 = (unitCost + 6.50 + packagingFee) / denom;
+      if (p2 < 50.00) return Math.max(29.00, p2);
+
+      // Faixa 3: R$ 50,00 a R$ 78,99 (R$ 6,75)
+      const p3 = (unitCost + 6.75 + packagingFee) / denom;
+      if (p3 < 79.00) return Math.max(50.00, p3);
+
+      // Faixa 4: >= R$ 79,00 (Sem custo fixo R$ 0,00 + eventual frete grátis)
+      const p4 = (unitCost + 0.00 + shipOver79 + packagingFee) / denom;
+      return Math.max(79.00, p4);
+    }
+
     // Metric Calculations for Product in Selected Channel
     function computeProductMetrics(p, channel = currentChannel) {
       const cfg = getCfg();
@@ -1807,16 +1861,37 @@
       const chanData = (st.channels && st.channels[channel]) ? st.channels[channel] : {};
 
       const commPct = chanData.commPct !== undefined && chanData.commPct !== '' ? toNum(chanData.commPct, cfg.comm) : cfg.comm;
-      const fixedFee = chanData.fixedFee !== undefined && chanData.fixedFee !== '' ? toNum(chanData.fixedFee, cfg.fixed) : cfg.fixed;
       const taxPct = chanData.taxPct !== undefined && chanData.taxPct !== '' ? toNum(chanData.taxPct, cfg.tax) : cfg.tax;
       const packagingFee = chanData.packagingFee !== undefined && chanData.packagingFee !== '' ? toNum(chanData.packagingFee, cfg.packaging) : cfg.packaging;
-      const shippingFee = toNum(chanData.shippingFee, 0);
+      const hasManualFixed = chanData.fixedFee !== undefined && chanData.fixedFee !== '';
+      const hasManualShip = chanData.shippingFee !== undefined && chanData.shippingFee !== '';
 
       const unitCost = p.u * cfg.kit;
       const denom = 1.0 - ((commPct + taxPct + cfg.target) / 100.0);
-      const minSalePrice = denom > 0.05 ? (unitCost + fixedFee + shippingFee + packagingFee) / denom : unitCost * 2.5;
+
+      let minSalePrice = 0;
+      if (channel === 'ml' && cfg.mlMode === 'auto' && !hasManualFixed) {
+        const ship79 = hasManualShip ? toNum(chanData.shippingFee, 0) : cfg.fixed;
+        minSalePrice = solveMinPriceMlAuto(unitCost, commPct, taxPct, cfg.target, packagingFee, ship79);
+      } else {
+        const fixedVal = hasManualFixed ? toNum(chanData.fixedFee, cfg.fixed) : cfg.fixed;
+        const shipVal = hasManualShip ? toNum(chanData.shippingFee, 0) : 0;
+        minSalePrice = denom > 0.05 ? (unitCost + fixedVal + shipVal + packagingFee) / denom : unitCost * 2.5;
+      }
 
       const salePrice = chanData.salePrice !== undefined && chanData.salePrice !== '' ? parseFloat(chanData.salePrice) : (channel === 'ml' && st.mlPrice ? parseFloat(st.mlPrice) : null);
+      const refPrice = (salePrice !== null && !isNaN(salePrice) && salePrice > 0) ? salePrice : minSalePrice;
+
+      let fixedFee = 0;
+      let shippingFee = 0;
+      if (channel === 'ml' && cfg.mlMode === 'auto' && !hasManualFixed) {
+        fixedFee = getMlTieredFee(refPrice);
+        shippingFee = hasManualShip ? toNum(chanData.shippingFee, 0) : (refPrice >= 79.00 ? cfg.fixed : 0.0);
+      } else {
+        fixedFee = hasManualFixed ? toNum(chanData.fixedFee, cfg.fixed) : cfg.fixed;
+        shippingFee = hasManualShip ? toNum(chanData.shippingFee, 0) : 0;
+      }
+
       let netProfit = null;
       let marginPct = null;
 
@@ -2368,10 +2443,10 @@
       const st = userAnalysis[currentModalProduct.id] || {};
       const chanData = (st.channels && st.channels[chan]) ? st.channels[chan] : {};
       const cfg = getCfg();
-
       const defChan = CHANNEL_DEFAULTS[chan] || CHANNEL_DEFAULTS.ml;
 
-      document.getElementById('m-price-sale').value = chanData.salePrice || (chan === 'ml' && st.mlPrice ? st.mlPrice : '');
+      const saleVal = chanData.salePrice || (chan === 'ml' && st.mlPrice ? st.mlPrice : '');
+      document.getElementById('m-price-sale').value = saleVal;
       document.getElementById('m-price-min').value = chanData.minPrice || '';
       document.getElementById('m-price-max').value = chanData.maxPrice || '';
       document.getElementById('m-sales-30d').value = chanData.sales30d || '';
@@ -2381,16 +2456,34 @@
       document.getElementById('m-pct-full').value = chanData.pctFull || '';
       document.getElementById('m-ad-type').value = chanData.adType || 'classico';
 
-      document.getElementById('m-comm-pct').value = chanData.commPct !== undefined && chanData.commPct !== '' ? chanData.commPct : (cfg.comm || defChan.comm);
-      document.getElementById('m-fixed-fee').value = chanData.fixedFee !== undefined && chanData.fixedFee !== '' ? chanData.fixedFee : (cfg.fixed !== undefined ? cfg.fixed : defChan.fixed);
-      document.getElementById('m-tax-pct').value = chanData.taxPct !== undefined && chanData.taxPct !== '' ? chanData.taxPct : cfg.tax;
-      document.getElementById('m-pack-fee').value = chanData.packagingFee !== undefined && chanData.packagingFee !== '' ? chanData.packagingFee : cfg.packaging;
+      const commVal = chanData.commPct !== undefined && chanData.commPct !== '' ? chanData.commPct : (chan === currentChannel ? cfg.comm : defChan.comm);
+      const taxVal = chanData.taxPct !== undefined && chanData.taxPct !== '' ? chanData.taxPct : cfg.tax;
+      const packVal = chanData.packagingFee !== undefined && chanData.packagingFee !== '' ? chanData.packagingFee : cfg.packaging;
+
+      document.getElementById('m-comm-pct').value = commVal;
+      document.getElementById('m-tax-pct').value = taxVal;
+      document.getElementById('m-pack-fee').value = packVal;
       document.getElementById('m-shipping-fee').value = chanData.shippingFee || '';
+
+      if (chanData.fixedFee !== undefined && chanData.fixedFee !== '') {
+        document.getElementById('m-fixed-fee').value = chanData.fixedFee;
+        document.getElementById('m-fixed-fee').setAttribute('data-manual', '1');
+      } else {
+        document.getElementById('m-fixed-fee').removeAttribute('data-manual');
+        if (chan === 'ml' && cfg.mlMode === 'auto') {
+          const numSale = parseFloat(saleVal);
+          const minAuto = solveMinPriceMlAuto(currentModalProduct.u, parseFloat(commVal)||14, parseFloat(taxVal)||4, cfg.target, parseFloat(packVal)||1.5, cfg.fixed);
+          const refP = (!isNaN(numSale) && numSale > 0) ? numSale : minAuto;
+          document.getElementById('m-fixed-fee').value = getMlTieredFee(refP).toFixed(2);
+        } else {
+          document.getElementById('m-fixed-fee').value = (chan === currentChannel ? cfg.fixed : defChan.fixed);
+        }
+      }
 
       document.getElementById('m-ref-url').value = chanData.refUrl || '';
       document.getElementById('m-notes').value = st.notes || '';
 
-      recalcModalMargin();
+      recalcModalMargin(false);
     }
 
     function handleAdTypeChange() {
@@ -2398,27 +2491,50 @@
       if (modalSelectedChannel === 'ml') {
         document.getElementById('m-comm-pct').value = type === 'premium' ? 19 : 14;
       }
-      recalcModalMargin();
+      recalcModalMargin(false);
     }
 
-    function recalcModalMargin() {
+    function recalcModalMargin(fromFixedInput = false) {
       if (!currentModalProduct) return;
       const p = currentModalProduct;
       const cfg = getCfg();
       const kitQty = parseInt(document.getElementById('modal-kit-select').value) || 1;
       const unitCost = p.u * kitQty;
 
+      if (fromFixedInput) {
+        const val = document.getElementById('m-fixed-fee').value;
+        if (val === '') {
+          document.getElementById('m-fixed-fee').removeAttribute('data-manual');
+        } else {
+          document.getElementById('m-fixed-fee').setAttribute('data-manual', '1');
+        }
+      }
+
       const commPct = toNum(document.getElementById('m-comm-pct').value, cfg.comm);
-      const fixedFee = toNum(document.getElementById('m-fixed-fee').value, cfg.fixed);
       const taxPct = toNum(document.getElementById('m-tax-pct').value, cfg.tax);
       const packagingFee = toNum(document.getElementById('m-pack-fee').value, cfg.packaging);
-      const shippingFee = toNum(document.getElementById('m-shipping-fee').value, 0);
-
       const salePrice = parseFloat(document.getElementById('m-price-sale').value);
 
-      // Target Min Price for meta %
-      const denom = 1.0 - ((commPct + taxPct + cfg.target) / 100.0);
-      const minSalePrice = denom > 0.05 ? (unitCost + fixedFee + shippingFee + packagingFee) / denom : unitCost * 2.5;
+      const isManualFixed = document.getElementById('m-fixed-fee').getAttribute('data-manual') === '1';
+      let minSalePrice = 0;
+
+      if (modalSelectedChannel === 'ml' && cfg.mlMode === 'auto' && !isManualFixed) {
+        const ship79 = document.getElementById('m-shipping-fee').value !== '' ? toNum(document.getElementById('m-shipping-fee').value, 0) : cfg.fixed;
+        minSalePrice = solveMinPriceMlAuto(unitCost, commPct, taxPct, cfg.target, packagingFee, ship79);
+        const refP = (!isNaN(salePrice) && salePrice > 0) ? salePrice : minSalePrice;
+        document.getElementById('m-fixed-fee').value = getMlTieredFee(refP).toFixed(2);
+      } else {
+        const fixedVal = toNum(document.getElementById('m-fixed-fee').value, cfg.fixed);
+        const shipVal = toNum(document.getElementById('m-shipping-fee').value, 0);
+        const denom = 1.0 - ((commPct + taxPct + cfg.target) / 100.0);
+        minSalePrice = denom > 0.05 ? (unitCost + fixedVal + shipVal + packagingFee) / denom : unitCost * 2.5;
+      }
+
+      const fixedFee = toNum(document.getElementById('m-fixed-fee').value, 0);
+      const shippingFee = document.getElementById('m-shipping-fee').value !== ''
+        ? toNum(document.getElementById('m-shipping-fee').value, 0)
+        : (modalSelectedChannel === 'ml' && cfg.mlMode === 'auto' && !isManualFixed && ((!isNaN(salePrice) ? salePrice : minSalePrice) >= 79.00) ? cfg.fixed : 0);
+
       document.getElementById('modal-target-min-price').textContent = `R$ ${minSalePrice.toFixed(2).replace('.', ',')}`;
 
       // Target Max Unit Cost
@@ -2440,7 +2556,7 @@
         const verdictElem = document.getElementById('modal-status-verdict');
         if (marginPct >= cfg.target) {
           valElem.style.color = 'var(--green-text)';
-          verdictElem.textContent = `✅ Margem viável (&ge; ${cfg.target}%)`;
+          verdictElem.innerHTML = `✅ Margem viável (&ge; ${cfg.target}%)`;
           verdictElem.style.color = 'var(--green-text)';
         } else if (marginPct >= 10) {
           valElem.style.color = 'var(--amber-text)';
